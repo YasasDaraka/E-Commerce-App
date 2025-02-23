@@ -3,9 +3,9 @@ import { assets } from "../assets/assets";
 const Footer = () => {
   return (
     <footer>
-      <div className="flex flex-col md:flex-row items-start justify-center px-6 md:px-16 lg:px-32 gap-10 py-14 border-b border-gray-500/30 text-gray-500">
+      <div className="flex flex-col md:flex-row items-start justify-center px-6 md:px-16 lg:px-32 gap-10 py-14 border-b border-[#F5ECE6] text-gray-700 bg-[#F8F2EE]">
         <div className="w-4/5">
-          <img className="w-28 md:w-32" src={assets.logo} alt="logo" />
+          <img className="w-28 md:w-38" src={assets.logo} alt="logo" />
           <p className="mt-6 text-sm">
             Our latest gadgets bring cutting-edge technology to your fingertips. From the newest smartphones to smart home devices, 
             our collection offers the best in innovation and performance. Explore the world of tech with top brands, exceptional features, and unbeatable prices. 
@@ -44,7 +44,7 @@ const Footer = () => {
         </div>
       </div>
       <p className="py-4 text-center text-xs md:text-sm">
-        Copyright 2025 © Yasasdaraka All Right Reserved.
+        Copyright 2025 © Yasasdaraka All Right Reserved
       </p>
     </footer>
   );
