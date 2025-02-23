@@ -17,6 +17,10 @@ import heart_icon from "./heart_icon.svg";
 import star_icon from "./star_icon.svg";
 import redirect_icon from "./redirect_icon.svg";
 import star_dull_icon from "./star_dull_icon.svg";
+import header_headphone_image from "./header_headphone_image.png";
+import header_playstation_image from "./header_playstation_image.png";
+import header_macbook_image from "./header_macbook_image.png";
+
 
 export const assets = {
   logo,
@@ -38,4 +42,7 @@ export const assets = {
   star_icon,
   redirect_icon,
   star_dull_icon,
+  header_headphone_image,
+  header_playstation_image,
+  header_macbook_image
 };
