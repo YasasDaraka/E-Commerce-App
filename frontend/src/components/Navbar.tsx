@@ -1,12 +1,27 @@
 
-import { useState } from "react";
+import { useEffect, useState } from "react";
 import { assets} from "../assets/assets";
-import { Link } from 'react-router-dom';
+import { Link, useLocation } from 'react-router-dom';
 
 
 const Navbar = () => {
 
-  const [isSeller, setIsSeller] = useState(false)
+  const location = useLocation();
+
+  useEffect(() => {
+    console.log(location.pathname)
+    if (location.pathname == "/products") {
+       setPath("products");
+       return;
+    }else {
+       setPath("home");
+       return;
+    }
+
+  }, [location]);
+
+  const [isSeller, setIsSeller] = useState(false);
+  const [path, setPath] = useState("")
 
   return (
     <nav className="flex items-center justify-between px-6 md:px-16 lg:px-32 py-3 border-b border-[#F5ECE6] text-gray-700 bg-[#EEF0F6]">
@@ -19,15 +34,19 @@ const Navbar = () => {
       <div className="flex items-center gap-4 lg:gap-8 max-md:hidden">
         <Link to="/" className="hover:text-gray-900 transition">
           Home
+          {path == "home" && <div className="w-full h-0.5 bg-orange-600 rounded-full"></div>}
         </Link>
-        <Link to="/all-products" className="hover:text-gray-900 transition">
+        <Link to="/products" className="hover:text-gray-900 transition">
           Shop
+          {path == "products" && <div className="w-full h-0.5 bg-orange-600 rounded-full"></div>}
         </Link>
         <Link to="/" className="hover:text-gray-900 transition">
           About Us
+          {path == "/" && <div className="w-full h-0.5 bg-orange-600 rounded-full"></div>}
         </Link>
         <Link to="/" className="hover:text-gray-900 transition">
           Contact
+          {path == "/" && <div className="w-full h-0.5 bg-orange-600 rounded-full"></div>}
         </Link>
 
       </div>

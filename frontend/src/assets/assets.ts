@@ -28,7 +28,11 @@ import earphone_featured from "./earphone_featured.jpg";
 import headphone_featured from "./headphone_featured.jpg";
 
 
+
+
+import apple_earphone_image from "./apple_earphone_image.png";
 export const assets = {
+  apple_earphone_image,
   logo,
   search_icon,
   user_icon,
