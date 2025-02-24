@@ -1,7 +1,9 @@
+import { useNavigate } from 'react-router-dom';
 import { assets } from '../assets/assets'
 
 const ProductCard = ({ product }:any) => {
 
+    const navigate = useNavigate();
     return (
         <div
             onClick={() => { }}
@@ -9,7 +11,7 @@ const ProductCard = ({ product }:any) => {
         >
             <div className="cursor-pointer group relative bg-gray-500/10 rounded-lg w-full h-52 flex items-center justify-center">
                 <img
-                    src={product.imgSrc}
+                    src={product.image}
                     alt={product.name}
                     className="group-hover:scale-105 transition object-cover w-4/5 h-4/5 md:w-full md:h-full"
                     width={800}
@@ -45,8 +47,8 @@ const ProductCard = ({ product }:any) => {
             </div>
 
             <div className="flex items-end justify-between w-full mt-1">
-                <p className="text-base font-medium">${product.price}</p>
-                <button className=" max-sm:hidden px-4 py-1.5 text-gray-500 border border-gray-500/20 rounded-full text-xs hover:bg-gray-500/20 transition">
+                <p className="text-base font-medium">${product.offerPrice}</p>
+                <button onClick={()=>{navigate(`/products/${product.id}`);}} className=" max-sm:hidden px-4 py-1.5 text-gray-500 border border-gray-500/20 rounded-full text-xs hover:bg-gray-500/20 transition">
                     Buy now
                 </button>
             </div>

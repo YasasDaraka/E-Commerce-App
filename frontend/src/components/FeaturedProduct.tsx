@@ -1,3 +1,4 @@
+import { useNavigate } from "react-router-dom";
 import { assets } from "../assets/assets";
 
 const products = [
@@ -22,6 +23,9 @@ const products = [
 ];
 
 const FeaturedProduct = () => {
+
+  const navigate = useNavigate();
+  
   return (
     <div className="mt-14">
       <div className="flex flex-col items-center">
@@ -42,7 +46,7 @@ const FeaturedProduct = () => {
               <p className="text-sm lg:text-base leading-5 max-w-60">
                 {description}
               </p>
-              <button className="flex items-center gap-1.5 bg-[#F88655] px-4 py-2 rounded">
+              <button onClick={()=>{navigate(`/products`);}} className="flex items-center gap-1.5 bg-[#F88655] px-4 py-2 rounded">
                 Buy now <img className="h-3 w-3" src={assets.redirect_icon} alt="Redirect Icon" />
               </button>
             </div>
