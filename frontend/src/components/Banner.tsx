@@ -17,7 +17,7 @@ const Banner = () => {
         </p>
         <button className="group flex items-center justify-center gap-1 px-12 py-2.5 bg-[#F88655] rounded text-white">
           Buy now
-          <img className="group-hover:translate-x-1 transition" src={assets.arrow_icon_white} alt="arrow_icon_white" />
+          <img className="group-hover:translate-x-1 transition ml-0.5 pt-1" src={assets.arrow_icon_white} alt="arrow_icon_white" />
         </button>
       </div>
       <img

@@ -23,6 +23,9 @@ import header_macbook_image from "./header_macbook_image.png";
 import jbl_soundbox_image from "./jbl_soundbox_image.png";
 import md_controller_image from "./md_controller_image.png";
 import sm_controller_image from "./sm_controller_image.png";
+import laptop_featured from "./laptop_featured.jpg";
+import earphone_featured from "./earphone_featured.jpg";
+import headphone_featured from "./headphone_featured.jpg";
 
 
 export const assets = {
@@ -50,5 +53,8 @@ export const assets = {
   header_macbook_image,
   jbl_soundbox_image,
   md_controller_image,
-  sm_controller_image
+  sm_controller_image,
+  laptop_featured,
+  earphone_featured,
+  headphone_featured
 };
