@@ -84,7 +84,7 @@ const ProductView = () => {
                 </div>
 
                 <div className="flex flex-col">
-                    <h1 className="text-3xl font-medium text-gray-800/90 mb-4">
+                    <h1 className="text-3xl font-medium text-gray-600 mb-4">
                         {productData.name}
                     </h1>
                     <div className="flex items-center gap-2">
@@ -104,7 +104,7 @@ const ProductView = () => {
                     <p className="text-gray-600 mt-3">
                         {productData.description}
                     </p>
-                    <p className="text-3xl font-medium mt-6">
+                    <p className="text-3xl font-medium mt-6 text-gray-600">
                         ${productData.offerPrice}
                         <span className="text-base font-normal text-gray-800/60 line-through ml-2">
                             ${productData.price}
@@ -133,10 +133,10 @@ const ProductView = () => {
                     </div>
 
                     <div className="flex items-center mt-10 gap-4">
-                        <button onClick={() => {addToCart(productData.id);}} className="w-full py-3 bg-gray-200 text-gray-800/80 hover:bg-gray-300 transition">
+                        <button onClick={() => {addToCart(productData.id);}} className="w-full py-3 bg-gray-200 text-gray-800/80 hover:bg-gray-300 transition rounded-md">
                             Add to Cart
                         </button>
-                        <button onClick={() => {addToCart(productData.id);  navigate("/cart"); }} className="w-full py-3 bg-[#F88655] text-white hover:bg-orange-500 transition">
+                        <button onClick={() => {addToCart(productData.id);  navigate("/cart"); }} className="w-full py-3 bg-[#F88655] text-white hover:bg-orange-500 transition rounded-md">
                             Buy now
                         </button>
                     </div>
@@ -144,7 +144,7 @@ const ProductView = () => {
             </div>
             <div className="flex flex-col items-center">
                 <div className="flex flex-col items-center mb-4 mt-16">
-                    <p className="text-3xl font-medium">Featured <span className="font-medium text-orange-600">Products</span></p>
+                    <p className="text-3xl font-medium text-gray-600">Featured <span className="font-medium text-orange-600">Products</span></p>
                     <div className="w-28 h-0.5 bg-orange-600 mt-2"></div>
                 </div>
                 <div className="grid grid-cols-2 md:grid-cols-3 lg:grid-cols-4 xl:grid-cols-5 gap-6 mt-6 pb-14 w-full">

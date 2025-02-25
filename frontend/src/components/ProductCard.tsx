@@ -26,7 +26,7 @@ const ProductCard = ({ product }:any) => {
                 </button>
             </div>
 
-            <p className="md:text-base font-medium pt-2 w-full truncate">{product.name}</p>
+            <p className="md:text-base font-medium pt-2 w-full truncate text-gray-600">{product.name}</p>
             <p className="w-full text-xs text-gray-500/70 max-sm:hidden truncate">{product.description}</p>
             <div className="flex items-center gap-2">
                 <p className="text-xs">{4.5}</p>
@@ -47,8 +47,8 @@ const ProductCard = ({ product }:any) => {
             </div>
 
             <div className="flex items-end justify-between w-full mt-1">
-                <p className="text-base font-medium">${product.offerPrice}</p>
-                <button onClick={()=>{navigate(`/products/${product.id}`);}} className=" max-sm:hidden px-4 py-1.5 text-gray-500 border border-gray-500/20 rounded-full text-xs hover:bg-gray-500/20 transition">
+                <p className="text-base font-medium text-gray-600">${product.offerPrice}</p>
+                <button onClick={()=>{navigate(`/products/${product.id}`);}} className=" max-sm:hidden px-4 py-1.5 text-gray-500 border border-[#f8865581] rounded-full text-xs hover:bg-gray-500/20 transition">
                     Buy now
                 </button>
             </div>

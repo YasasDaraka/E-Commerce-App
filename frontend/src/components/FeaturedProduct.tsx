@@ -29,7 +29,7 @@ const FeaturedProduct = () => {
   return (
     <div className="mt-14">
       <div className="flex flex-col items-center">
-        <p className="text-3xl font-medium">Featured Products</p>
+      <p className="text-3xl font-medium text-gray-600">Featured <span className="font-medium text-orange-600">Products</span></p>
         <div className="w-28 h-0.5 bg-orange-600 mt-2"></div>
       </div>
 
@@ -46,7 +46,7 @@ const FeaturedProduct = () => {
               <p className="text-sm lg:text-base leading-5 max-w-60">
                 {description}
               </p>
-              <button onClick={()=>{navigate(`/products`);}} className="flex items-center gap-1.5 bg-[#F88655] px-4 py-2 rounded">
+              <button onClick={()=>{navigate(`/products`);}} className="flex items-center gap-1.5 bg-[#F88655] px-4 py-2 rounded-md">
                 Buy now <img className="h-3 w-3" src={assets.redirect_icon} alt="Redirect Icon" />
               </button>
             </div>

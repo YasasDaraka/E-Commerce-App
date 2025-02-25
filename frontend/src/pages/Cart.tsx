@@ -1,4 +1,3 @@
-import { useEffect } from "react";
 import { assets } from "../assets/assets";
 import OrderSummary from "../components/OrderSummary";
 import { useAppContext } from "../context/AppContext";

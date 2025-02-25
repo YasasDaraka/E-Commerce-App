@@ -26,7 +26,8 @@ import sm_controller_image from "./sm_controller_image.png";
 import laptop_featured from "./laptop_featured.jpg";
 import earphone_featured from "./earphone_featured.jpg";
 import headphone_featured from "./headphone_featured.jpg";
-
+import money from "./money.png";
+import credit_card from "./credit-card.png";
 
 
 
@@ -60,7 +61,10 @@ export const assets = {
   sm_controller_image,
   laptop_featured,
   earphone_featured,
-  headphone_featured
+  headphone_featured,
+  money,
+  credit_card
+
 };
 
 export const productsDummyData = [
