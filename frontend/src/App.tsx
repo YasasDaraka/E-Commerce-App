@@ -7,6 +7,9 @@ import ProductView from './pages/ProductView'
 import Cart from './pages/Cart'
 
 import { AppContextProvider } from './context/AppContext';
+import UserView from './pages/UserDashboard'
+import About from './pages/About'
+import Contact from './pages/Contact'
 
 function App() {
 
@@ -19,6 +22,9 @@ function App() {
             <Route path='/products' element={<Products/>} />
             <Route path='/products/:id' element={<ProductView/>} />
             <Route path='/cart' element={<Cart/>} />
+            <Route path='/account' element={<UserView/>} />
+            <Route path='/about' element={<About/>} />
+            <Route path='/contact' element={<Contact/>} />
           </Route>
         </Routes>
       </BrowserRouter>

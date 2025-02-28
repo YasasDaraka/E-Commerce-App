@@ -55,7 +55,7 @@ const HeaderSlider = () => {
         {sliderData.map((slide, index) => (
           <div
             key={slide.id}
-            className="flex flex-col-reverse md:flex-row items-center justify-between bg-[#E6E9F2] py-8 md:px-14 px-5 mt-6 rounded-xl min-w-full"
+            className="flex flex-col-reverse md:flex-row items-center justify-between bg-[#EEF0F6] py-8 md:px-14 px-5 mt-6 rounded-xl min-w-full"
           >
             <div className="md:pl-8 mt-10 md:mt-0 w-1/2">
               <p className="md:text-base text-orange-600 pb-1 ml-0.5">{slide.offer}</p>
@@ -63,7 +63,7 @@ const HeaderSlider = () => {
                 {slide.title}
               </h1>
               <div className="flex items-center mt-4 md:mt-6">
-                <button onClick={()=>{navigate(`/products`);}} className="md:px-10 px-7 md:py-2.5 py-2 bg-[#F88655] rounded-full text-white font-medium">
+                <button onClick={()=>{navigate(`/products`);}} className="md:px-10 px-7 md:py-2.5 py-2 bg-[#F88655] hover:bg-orange-500 transition rounded-full text-white font-medium">
                   {slide.buttonText1}
                 </button>
                 <button className="group flex items-center gap-2 px-6 py-2.5 font-medium text-gray-600">

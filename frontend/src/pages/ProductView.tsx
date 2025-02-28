@@ -51,7 +51,6 @@ const ProductView = () => {
           image: assets.apple_earphone_image,
         }]);
 
-    const { id } = useParams();
     const navigate = useNavigate();
     const { addToCart } = useAppContext();
 

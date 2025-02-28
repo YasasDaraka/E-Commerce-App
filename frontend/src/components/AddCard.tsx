@@ -37,6 +37,7 @@ export default function AddCard({setPaymentForm, paymentForm, setReady}:CardProp
         <p className="text-2xl md:text-3xl font-medium text-orange-600 ">
             Card <span className="text-gray-500">Information</span>
             </p>
+            <div className="w-28 h-0.5 bg-orange-600"></div>
               <div className="space-y-4">
                 <div>
                   <label className="block mb-1 font-medium text-gray-700">Card Number</label>

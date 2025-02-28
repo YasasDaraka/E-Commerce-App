@@ -3,9 +3,10 @@ import search_icon from "./search_icon.svg";
 import user_icon from "./user_icon.svg";
 import cart_icon from "./cart_icon.svg";
 import add_icon from "./add_icon.svg";
-import instagram_icon from "./instagram_icon.svg";
-import facebook_icon from "./facebook_icon.svg";
-import twitter_icon from "./twitter_icon.svg";
+import instagram_icon from "./instagram.png";
+import facebook_icon from "./facebook.png";
+import linkedin_icon from "./linkedin.png";
+import twitter_icon from "./twitter.png";
 import box_icon from "./box_icon.svg";
 import menu_icon from "./menu_icon.svg";
 import arrow_icon from "./arrow_icon.svg";
@@ -28,6 +29,10 @@ import earphone_featured from "./earphone_featured.jpg";
 import headphone_featured from "./headphone_featured.jpg";
 import money from "./money.png";
 import credit_card from "./credit-card.png";
+import map from "./map.png";
+import email from "./email.png";
+import call from "./call.png";
+import map_view from "./map_view.png";
 
 
 
@@ -42,6 +47,7 @@ export const assets = {
   instagram_icon,
   facebook_icon,
   twitter_icon,
+  linkedin_icon,
   box_icon,
   menu_icon,
   arrow_icon,
@@ -63,7 +69,11 @@ export const assets = {
   earphone_featured,
   headphone_featured,
   money,
-  credit_card
+  credit_card,
+  map,
+  call,
+  email,
+  map_view
 
 };
 

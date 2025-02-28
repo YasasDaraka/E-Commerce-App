@@ -46,7 +46,7 @@ const FeaturedProduct = () => {
               <p className="text-sm lg:text-base leading-5 max-w-60">
                 {description}
               </p>
-              <button onClick={()=>{navigate(`/products`);}} className="flex items-center gap-1.5 bg-[#F88655] px-4 py-2 rounded-md">
+              <button onClick={()=>{navigate(`/products`);}} className="flex items-center gap-1.5 bg-[#F88655] text-white hover:bg-orange-500 transition px-4 py-2 rounded-md">
                 Buy now <img className="h-3 w-3" src={assets.redirect_icon} alt="Redirect Icon" />
               </button>
             </div>
