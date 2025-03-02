@@ -10,6 +10,7 @@ import { AppContextProvider } from './context/AppContext';
 import UserView from './pages/UserDashboard'
 import About from './pages/About'
 import Contact from './pages/Contact'
+import Auth from './pages/auth'
 
 function App() {
 
@@ -25,6 +26,7 @@ function App() {
             <Route path='/account' element={<UserView/>} />
             <Route path='/about' element={<About/>} />
             <Route path='/contact' element={<Contact/>} />
+            <Route path='/auth' element={<Auth/>} />
           </Route>
         </Routes>
       </BrowserRouter>

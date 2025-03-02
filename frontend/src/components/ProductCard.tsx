@@ -1,7 +1,11 @@
 import { useNavigate } from 'react-router-dom';
 import { assets } from '../assets/assets'
 
-const ProductCard = ({ product }:any) => {
+interface ProductCardProps {
+    product: any;
+    type?: "featured"; 
+  }
+const ProductCard = ( {product, type}:ProductCardProps) => {
 
     const navigate = useNavigate();
     return (
@@ -11,11 +15,9 @@ const ProductCard = ({ product }:any) => {
         >
             <div className="cursor-pointer group relative bg-gray-500/10 rounded-lg w-full h-52 flex items-center justify-center">
                 <img
-                    src={product.image}
-                    alt={product.name}
-                    className="group-hover:scale-105 transition object-cover w-4/5 h-4/5 md:w-full md:h-full"
-                    width={800}
-                    height={800}
+                    src={product.image == "" || !product.image ? assets.image_error : product.image}
+                    alt={product.itemName}
+                    className="group-hover:scale-105 transition object-cover w-full mix-blend-multiply"
                 />
                 <button className="absolute top-2 right-2 bg-white p-2 rounded-full shadow-md">
                     <img
@@ -26,7 +28,7 @@ const ProductCard = ({ product }:any) => {
                 </button>
             </div>
 
-            <p className="md:text-base font-medium pt-2 w-full truncate text-gray-600">{product.name}</p>
+            <p className="md:text-base font-medium pt-2 w-full truncate text-gray-600">{product.itemName}</p>
             <p className="w-full text-xs text-gray-500/70 max-sm:hidden truncate">{product.description}</p>
             <div className="flex items-center gap-2">
                 <p className="text-xs">{4.5}</p>
@@ -48,7 +50,7 @@ const ProductCard = ({ product }:any) => {
 
             <div className="flex items-end justify-between w-full mt-1">
                 <p className="text-base font-medium text-gray-600">${product.offerPrice}</p>
-                <button onClick={()=>{navigate(`/products/${product.id}`);}} className=" max-sm:hidden px-4 py-1.5 text-gray-500 border border-[#f8865581] rounded-full text-xs hover:bg-gray-500/20 transition">
+                <button onClick={()=>{ type != "featured" ? navigate(`/products/${product.itemName}`): navigate(`/products`)}} className=" max-sm:hidden px-4 py-1.5 text-gray-500 border border-[#f8865581] rounded-full text-xs hover:bg-gray-500/20 transition">
                     Buy now
                 </button>
             </div>

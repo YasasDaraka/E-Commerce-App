@@ -2,12 +2,14 @@
 import { useEffect, useState } from "react";
 import { assets} from "../assets/assets";
 import { Link, useLocation, useNavigate } from 'react-router-dom';
+import { useAppContext } from "../context/AppContext";
 
 
 const Navbar = () => {
 
   const location = useLocation();
   const navigate = useNavigate();
+  const { getCartCount, getUser } = useAppContext();
 
   useEffect(() => {
 
@@ -22,7 +24,7 @@ const Navbar = () => {
      setPath("contact");
      return;
    }
-   else if(location.pathname == "/account") {
+   else if(location.pathname == "/account" || location.pathname == "/auth") {
      setPath("account");
      return;
    }
@@ -30,17 +32,24 @@ const Navbar = () => {
     setPath("cart");
     return;
   }
-   else {
-      setPath("home");
-      return;
-   }
+  else if(location.pathname == "/") {
+    setPath("home");
+    return;
+  }
+  
 
   }, [location]);
 
   const [path, setPath] = useState("")
 
-  function checkUserLogin() {
-    navigate("/account")
+  const checkUserLogin = ()=>{
+
+    if (getUser() ==  null || getUser().name == "" ) {
+      navigate("/auth");
+        return;
+    }
+    navigate("/account");
+    
   }
 
   return (
@@ -75,6 +84,7 @@ const Navbar = () => {
         <img className="w-4 h-4" src={assets.search_icon} alt="search icon" />
         
         <div className="flex flex-col justify-center items-center w-4 h-full relative">
+          {getCartCount() > 0 && <div className="w-2 h-2 bg-orange-600 rounded-full absolute -top-1.5 ml-0.5"></div>}
           <img className="w-4 h-4" src={assets.cart_icon} alt="search icon" onClick={() => {navigate("/cart")}} />
           {path == "cart" && <div className="w-full h-0.5 bg-orange-600 rounded-full absolute -bottom-2 ml-0.5"></div>}
         </div>

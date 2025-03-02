@@ -20,9 +20,12 @@ app.use(express.urlencoded({ extended: false }));
 app.use(cookieParser());
 app.use(express.static(path.join(__dirname, 'public')));
 
+import dbConnection from './core/database/DBConnection';
+dbConnection();
+
 //app.use(roleBasedAccess);
 
-const basePath = process.env.API_BASE_PATH || '/quizapp/api/v1';
+const basePath = process.env.API_BASE_PATH || '/app/api/v1';
 loadRoutes(app, basePath, path.join(__dirname, 'core/modules'));
 
 app.use(errorHandler);

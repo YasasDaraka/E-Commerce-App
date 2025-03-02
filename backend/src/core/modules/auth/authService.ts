@@ -1,32 +1,34 @@
 import * as jwtUtils from "../../utils/jwtUtils";
 import bcrypt from 'bcrypt';
-import userRepository from '../user/userRepository';
 import { Response } from "express";
-import  {createPrismaClient}  from '../../database/prisma';
 import logger from '../../utils/logger';
+import userRepository from "../user/userRepository";
+import mongoose from "mongoose";
+import { createError, HttpStatus } from "../../middlewares/customErrorHandler";
 
 const authService = {
   
-  signIn : async (username: string, password: string, res: Response ) => {
+  signIn : async (email: string, password: string, res: Response ) => {
+    const session = await mongoose.startSession();
     try {
-      logger.info(`Attempting to sign in user: ${username}`);
+      logger.info(`Attempting to sign in user: ${email}`);
 
-    const user = await userRepository.getUserByUsername(createPrismaClient(),username);
+     const user = await userRepository.getUserByEmail(session,email);
     if (!user) {
-      logger.warn(`Sign-in failed: User not found for username: ${username}`);
-      throw new Error('User not found');
+      logger.warn(`Sign-in failed: User not found for email: ${email}`);
+      throw createError(HttpStatus.NOT_FOUND, "User not found");
     }
 
     const isPasswordValid = await bcrypt.compare(password, user.password);
     if (!isPasswordValid) {
-      logger.warn(`Sign-in failed: Invalid password for username: ${username}`);
-      throw new Error('Invalid password');
+      logger.warn(`Sign-in failed: Invalid password for email: ${email}`);
+      throw createError(HttpStatus.BAD_REQUEST, "Invalid password");
     }
 
-    const accessToken = jwtUtils.generateAccessToken({ username: user.user_name, role: user.role });
-    const refreshToken = jwtUtils.generateRefreshToken({ username: user.user_name });
+    const accessToken = jwtUtils.generateAccessToken({ email: user.email, role: user.role });
+    const refreshToken = jwtUtils.generateRefreshToken({ email: user.email });
 
-    logger.info(`Generated tokens for user: ${username}`);
+    logger.info(`Generated tokens for user: ${email}`);
 
     res.cookie("refreshToken", refreshToken, {
       httpOnly: true,
@@ -34,10 +36,10 @@ const authService = {
       sameSite: "strict",
       maxAge: 7 * 24 * 60 * 60 * 1000, 
     });
-    logger.info(`Refresh token set in cookie for user: ${username}`);
-    return { accessToken, user: { username: user.user_name, role: user.role , name:user.name} };
+    logger.info(`Refresh token set in cookie for user: ${email}`);
+    return { accessToken, user: { email: user.email, role: user.role , name:user.name} };
     } catch (error) {
-      logger.error(`Sign-in failed for username: ${username}`, { error });
+      logger.error(`Sign-in failed for username: ${email}`, { error });
       throw error
     }
   },
@@ -47,14 +49,14 @@ const authService = {
 
       if (!token) {
         logger.warn(`Refresh token not provided`);
-        throw new Error("Refresh token not provided");
+        throw createError(HttpStatus.BAD_REQUEST, "Refresh token not provided");
       }
       const payload = jwtUtils.verifyRefreshToken(token);
-      logger.info(`Access token refreshed for user: ${payload.username}`);
-      return jwtUtils.generateAccessToken({ username: payload.username, role: payload.role });
+      logger.info(`Access token refreshed for user: ${payload.email}`);
+      return jwtUtils.generateAccessToken({ email: payload.email, role: payload.role });
       
     } catch (error) {
-      logger.error(`Access token refreshed failed for username: ${token}`, { error });
+      logger.error(`Access token refreshed failed for email: ${token}`, { error });
       throw error
     }
   }

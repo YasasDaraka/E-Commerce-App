@@ -10,11 +10,10 @@ export type AccessiblePaths = {
     [key in Role]: Route[];
 };
 
-const basePath = process.env.API_BASE_PATH || '/quizapp/api/v1';
+const basePath = process.env.API_BASE_PATH || '/app/api/v1';
 
 export const accessiblePaths: AccessiblePaths = {
     ADMIN: [
-        //Auth
         { method: 'POST', path: basePath+'/signIn/' },
         { method: 'POST', path: basePath+'/refreshToken' },
         { method: 'POST', path: basePath+'/logout' },
@@ -26,4 +25,4 @@ export const accessiblePaths: AccessiblePaths = {
     ]
 };
 
-export const dirrectAccessRoutes = ['/quizapp/api/v1/auth/signIn', '/quizapp/api/v1/auth/logout'];
+export const dirrectAccessRoutes = ['/app/api/v1/auth/signIn', '/app/api/v1/auth/logout'];

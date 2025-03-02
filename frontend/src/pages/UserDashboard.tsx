@@ -42,8 +42,8 @@ interface WishlistItem {
 
 const mockUser: UserDetails = {
   id: "user123",
-  name: "Alex Johnson",
-  email: "alex.johnson@example.com",
+  name: "Yasas Daraka",
+  email: "yasas@gmail.com",
   phone: "+1 (555) 123-4567",
   avatarUrl: "/images/avatar.jpg",
   address: {

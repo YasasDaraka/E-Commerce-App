@@ -1,18 +1,34 @@
 import ProductCard from "./ProductCard";
-import { useAppContext } from "../context/AppContext";
 import { useNavigate } from "react-router-dom";
+import { useEffect, useState } from "react";
+import api from "../api/api";
 
 const HomeProducts = () => {
 
   const navigate = useNavigate();
-  const { products } = useAppContext()
 
+  const [products, setProducts] = useState([]);
+
+  const getFeaturedProducts = async ()=> {
+    try {
+      const response = await api.get(`/product/featured/items`);
+     if (response.status === 200) {           
+        return setProducts(response.data.data)
+     } 
+      
+    } catch (err) {
+      
+    }
+    }
+    useEffect(()=>{
+      getFeaturedProducts();
+    },[])
   return (
     <div className="flex flex-col justify-center items-center pt-14 mx-22  ">
       
        <div className="flex flex-col items-start">
 
-        <div className="flex flex-col items-start w-full">
+        <div className="flex flex-col items-center w-full">
           <div className="flex flex-col items-end">
             <p className="text-2xl font-medium text-gray-600">Popular <span className="font-medium text-orange-600">Products</span></p>
             <div className="w-16 h-0.5 bg-orange-600 rounded-full"></div>

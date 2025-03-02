@@ -1,16 +1,129 @@
+import { useEffect, useState } from "react";
 import { assets } from "../assets/assets";
 import OrderSummary from "../components/OrderSummary";
 import { useAppContext } from "../context/AppContext";
 import { useNavigate } from "react-router-dom";
-
+import api from "../api/api";
+import showToast from "../alert/alert";
+import { ToastContainer } from "react-toastify";
+import {
+  Button,
+  Dialog,
+  DialogActions,
+  DialogContent,
+  DialogContentText,
+  DialogTitle,
+} from "@mui/material";
 const Cart = () => {
 
-  const { products, cartItems, addToCart, updateCartQuantity, getCartCount } = useAppContext();
+  const { cartItems, addToCart, getCartCount, updateCartQuantity, getShipCost, getCartAmount, getTax, getUser, clearCart} = useAppContext();
+  const [cart, setCart] = useState<any[]>([]);
+  const [signIn, setSignIn] = useState<boolean>(false);
   const navigate = useNavigate();
 
-//   useEffect(()=>{
-//     console.log(getCartCount());
-//   },[])
+  const [selectedAddress, setSelectedAddress] = useState<any>(null);
+  const [paymentForm, setPaymentForm] = useState({
+    cardNumber: '',
+    cardholderName: '',
+    expiryMonth: '',
+    expiryYear: '',
+    cvv: ''
+  });
+
+  useEffect(()=>{
+    getProductItems();
+  },[])
+
+ 
+  const getProductItems = async ()=> {
+
+    const itemNames =   Object.keys(cartItems);
+    try {
+      const response = await api.post('/product/cart/items', {
+        itemNames: itemNames   
+      });
+    if (response.status === 200) {           
+      return setCart(response.data.data)
+    } 
+      showToast('An unexpected error occurred',"error");
+
+    } catch (err) {
+        showToast('Error getting Product', "error");
+    }
+    }
+
+    const checkCartQty = async (id:any)=> {
+
+      if (cart && Array.isArray(cart)) {
+        for (const items of cart) {
+            if(items.itemName == id && items.qty > cartItems[items.itemName]){
+              addToCart(items.itemName)
+            }
+        }
+      } 
+    }
+    const placeOrder = async ()=> {
+
+      try {
+        const response = await api.post('/order', {
+          userId: getUser() !=  null ? getUser() : null ,
+          status: "shipped",
+          cardNum: paymentForm.cardNumber,//
+          amount: getShipCost(cart) + getCartAmount(cart) + Math.floor(getCartAmount(cart) * getTax(cart)),
+          orderDetails: cart.map((item)=>(
+              {
+                itemId: item._id, 
+                quantity: cartItems[item.itemName],
+                unitPrice: item.offerPrice,
+                total: item.offerPrice * cartItems[item.itemName]
+              }
+          )),
+          addresses: selectedAddress
+          });
+
+          if (response.status === 201) {           
+            clearDetails();
+            return showToast('Order Placed Successfully',"success");
+          } 
+
+        } catch (err) {
+          showToast('Error Placing Product', "error");
+        }
+        
+    }
+
+    const prepareSubmit = ()=>{
+
+      if (getUser() ==  null || getUser().name == "" ) {
+          // navigate(`/auth`);
+          setSignIn(true)
+          return;
+      }
+        
+      if(!paymentForm.cardNumber){
+        showToast('Add Card before Place Order', "error");
+        return;
+      }
+
+      if(!selectedAddress || selectedAddress.length < 5){
+        showToast('Add Valid Address before Place Order', "error");
+        return;
+      }
+
+      placeOrder();
+    }
+
+    const clearDetails = ()=>{
+      setPaymentForm({
+        cardNumber: '',
+        cardholderName: '',
+        expiryMonth: '',
+        expiryYear: '',
+        cvv: ''
+      })
+      clearCart();
+      setSelectedAddress("");
+    }
   return (
     <>
       <div className="flex flex-col md:flex-row gap-10 px-6 pt-14 mb-20">
@@ -40,51 +153,51 @@ const Cart = () => {
                 </tr>
               </thead>
               <tbody>
-                {Object.keys(cartItems).map((itemId) => {
-                  const product = products.find((product:any) => product._id === itemId);
+                {cart.map((item:any) => {
+                  // const product = products.find((product:any) => product._id === itemId);
 
-                  if (!product || cartItems[itemId] <= 0) return null;
+                  if (!item || cartItems[item.itemName] <= 0 || cartItems[item.itemName] == null) return null;
 
                   return (
-                    <tr key={itemId}>
+                    <tr key={item._id}>
                       <td className="flex items-center gap-4 py-4 md:px-4 px-1">
                         <div>
                           <div className="rounded-lg overflow-hidden bg-gray-500/10 p-2">
                             <img
-                              src={product.image}
-                              alt={product.name}
+                              src={item.image}
+                              alt={item.itemName}
                               className="w-16 h-auto object-cover mix-blend-multiply"
                             />
                           </div>
                           <button
                             className="md:hidden text-xs text-orange-600 mt-1"
-                            onClick={() => updateCartQuantity(product._id, 0)}
+                             onClick={() => updateCartQuantity(item.itemName, 0)}
                           >
                             Remove
                           </button>
                         </div>
                         <div className="text-sm hidden md:block">
-                          <p className="text-gray-800">{product.name}</p>
+                          <p className="text-gray-800">{item.name}</p>
                           <button
                             className="text-xs text-orange-600 mt-1"
-                            onClick={() => updateCartQuantity(product._id, 0)}
+                             onClick={() => updateCartQuantity(item.itemName, 0)}
                           >
                             Remove
                           </button>
                         </div>
                       </td>
-                      <td className="py-4 md:px-4 px-1 text-gray-600">${product.offerPrice}</td>
+                      <td className="py-4 md:px-4 px-1 text-gray-600">${item.offerPrice}</td>
                       <td className="py-4 md:px-4 px-1">
                         <div className="flex items-center md:gap-2 gap-1">
-                          <button onClick={() => updateCartQuantity(product._id, cartItems[itemId] - 1)}>
+                          <button onClick={() => { cartItems[item.itemName] > 1 && updateCartQuantity(item.itemName, cartItems[item.itemName] - 1)}}>
                             <img
                               src={assets.decrease_arrow}
                               alt="decrease_arrow"
                               className="w-4 h-4"
                             />
                           </button>
-                          <input onChange={e => updateCartQuantity(product._id, Number(e.target.value))} type="" value={cartItems[itemId]} className="w-8 border border-gray-300 rounded-md text-center focus:border-gray-400 focus:outline-none focus:ring-1 "></input>
-                          <button onClick={() => addToCart(product._id)}>
+                          <input onChange={e => {updateCartQuantity(item.itemName, Number(e.target.value))}} type="" value={cartItems[item.itemName]} className="w-8 border border-gray-300 rounded-md text-center focus:border-gray-400 focus:outline-none focus:ring-1 "></input>
+                          <button onClick={() => checkCartQty(item.itemName)}>
                             <img
                               src={assets.increase_arrow}
                               alt="increase_arrow"
@@ -93,7 +206,7 @@ const Cart = () => {
                           </button>
                         </div>
                       </td>
-                      <td className="py-4 md:px-4 px-1 text-gray-600">${(product.offerPrice * cartItems[itemId]).toFixed(2)}</td>
+                      <td className="py-4 md:px-4 px-1 text-gray-600">${(item.offerPrice * cartItems[item.itemName]).toFixed(2)}</td>
                     </tr>
                   );
                 })}
@@ -109,7 +222,34 @@ const Cart = () => {
             Continue Shopping
           </button>
         </div>
-        <OrderSummary />
+        <OrderSummary cart={cart} setPaymentForm={setPaymentForm} paymentForm={paymentForm} setSelectedAddress={setSelectedAddress} selectedAddress={selectedAddress} onSubmit={prepareSubmit}/>
+        <Dialog
+          open={signIn}
+          onClose={() => setSignIn(false)}
+          aria-labelledby="alert-dialog-title"
+          aria-describedby="alert-dialog-description"
+        >
+        <DialogTitle id="alert-dialog-title">Need Sign In</DialogTitle>
+        <DialogContent>
+          <DialogContentText id="alert-dialog-description">
+          Please sign in before placing your order.
+          </DialogContentText>
+        </DialogContent>
+        <DialogActions>
+        <Button onClick={() => setSignIn(false)} color="primary">
+          Cancel
+          </Button>
+            <Button
+            onClick={() => navigate("/auth")}
+            color="secondary"
+            autoFocus
+          >
+            Confirm
+          </Button>
+          </DialogActions>
+        </Dialog>
+  
+        <ToastContainer className={"overflow-x-hidden"}/>
       </div>
     </>
   );

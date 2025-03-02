@@ -7,7 +7,7 @@ const TOKEN_EXPIRATION = "1h";
 const REFRESH_EXPIRATION = "7d";
 
 interface CustomJwtPayload extends JwtPayload {
-    username: string;
+    email: string;
     role?: string;
   }
 
@@ -28,7 +28,7 @@ export const verifyRefreshToken = (token: string) => {
   
     const payload = jwt.verify(token, REFRESH_TOKEN_SECRET);
 
-    if (typeof payload !== "object" || payload === null || !("username" in payload)) {
+    if (typeof payload !== "object" || payload === null || !("email" in payload)) {
       throw new Error("Invalid token payload");
     }
 
