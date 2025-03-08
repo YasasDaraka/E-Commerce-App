@@ -1,36 +1,36 @@
 import { useEffect, useState } from "react";
 
 interface CardProps{
-    setPaymentForm:any
-    paymentForm:any
-    setReady:any
+  setPaymentForm:any
+  paymentForm:any
+  setReady:any
 }
 export default function AddCard({setPaymentForm, paymentForm, setReady}:CardProps) {
 
-    const [btn, setBtn] = useState(false); 
-    const handleInputChange = (e:any) => {
-        const { name, value } = e.target;
-        setPaymentForm({
-          ...paymentForm,
-          [name]: value
-        });
-        
-      };
-    
-      useEffect(() => {
-              const values = paymentForm.cardNumber != '' && paymentForm.cardNumber.length > 3  &&
-              paymentForm.cardholderName != '' && paymentForm.cardholderName.length > 3  &&
-              paymentForm.expiryMonth != '' &&
-              paymentForm.expiryYear != '' &&
-              paymentForm.cvv != '' && paymentForm.cvv.length > 2 
+  const [btn, setBtn] = useState(false); 
+  const handleInputChange = (e:any) => {
+      const { name, value } = e.target;
+      setPaymentForm({
+        ...paymentForm,
+        [name]: value
+      });
+      
+    };
+  
+  
+    useEffect(() => {
+            const values = paymentForm.cardNumber != '' && paymentForm.cardNumber.length > 3  &&
+            paymentForm.cardholderName != '' && paymentForm.cardholderName.length > 3  &&
+            paymentForm.expiryMonth != '' &&
+            paymentForm.expiryYear != '' &&
+            paymentForm.cvv != '' && paymentForm.cvv.length > 2 
 
-              if(values){
-                setBtn(true);
-                return;
-              }
-              setBtn(false);
-       }, [paymentForm])
-    
+            if(values){
+              setBtn(true);
+              return;
+            }
+            setBtn(false);
+     }, [paymentForm])
 
   return (
     <div className="flex flex-col justify-center items-center gap-6 px-6 py-8 bg-gray-500/10">
@@ -59,7 +59,7 @@ export default function AddCard({setPaymentForm, paymentForm, setReady}:CardProp
                     name="cardholderName"
                     value={paymentForm.cardholderName}
                     onChange={handleInputChange}
-                    placeholder="John Doe"
+                    placeholder="Cardholder name"
                     className="w-full p-2 border rounded border-gray-300 focus:border-orange-600 focus:outline-none focus:ring-0"
                   />
                   

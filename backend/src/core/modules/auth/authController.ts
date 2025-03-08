@@ -7,7 +7,6 @@ const authController = {
     try {
       const token = req.cookies.refreshToken;
       const newToken = await authService.refreshToken(token);
-  
       res.status(200).json({
         message: 'Token refreshed successfully',
         token: newToken,

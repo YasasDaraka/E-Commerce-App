@@ -1,24 +1,25 @@
-import { useEffect, useState } from "react";
 import { assets } from "../assets/assets";
 import ProductCard from "../components/ProductCard";
 import Loading from "../components/Loading";
 import { useNavigate, useParams } from "react-router-dom";
 import { useAppContext } from "../context/AppContext";
-import { ToastContainer } from "react-toastify";
-import showToast  from "../alert/alert";
+import { useEffect, useState } from "react";
 import api from "../api/api";
+import showToast from "../alert/alert";
+import { ToastContainer } from "react-toastify";
+
+
 
 const ProductView = () => {
-
+    const navigate = useNavigate();
+    const { addToCart, getRole } = useAppContext();
+    const [role, setRole] = useState<any>(null);
     const { id } = useParams(); 
     const [products, setProducts] = useState([]);
-
-    const navigate = useNavigate();
-    const { addToCart } = useAppContext();
-
     const [productData, setProductData] = useState<any>({});
 
         useEffect(()=>{
+            setRole(getRole()); 
             getProduct();
             getFeaturedProducts();
         },[])
@@ -48,7 +49,6 @@ const ProductView = () => {
            }
           }
 
-        
     return productData ? (<>
         <div className="px-6 md:px-16 lg:px-32 pt-14 space-y-10">
             <div className="grid grid-cols-1 md:grid-cols-2 gap-16">
@@ -113,10 +113,15 @@ const ProductView = () => {
                     </div>
 
                     <div className="flex items-center mt-10 gap-4">
-                        <button onClick={() => {addToCart(productData.itemName);  showToast(`${productData.itemName} Add to cart`,"success"); }} className="w-full py-3 bg-gray-200 text-gray-800/80 hover:bg-gray-300 transition rounded-md">
+                        <button onClick={() => {
+                           if( getRole() == "USER"){
+                            addToCart(productData.itemName);  showToast(`${productData.itemName} Add to cart`,"success");
+                           }}} className="w-full py-3 bg-gray-200 text-gray-800/80 hover:bg-gray-300 transition rounded-md">
                             Add to Cart
                         </button>
-                        <button onClick={() => {addToCart(productData.itemName);  navigate("/cart"); }} className="w-full py-3 bg-[#F88655] text-white hover:bg-orange-500 transition rounded-md">
+                        <button onClick={() => {
+                            if( getRole() == "USER"){ addToCart(productData.itemName);  navigate("/cart");}
+                            }} className="w-full py-3 bg-[#F88655] text-white hover:bg-orange-500 transition rounded-md">
                             Buy now
                         </button>
                     </div>
@@ -125,10 +130,10 @@ const ProductView = () => {
             <div className="flex flex-col items-center">
                 <div className="flex flex-col items-center mb-4 mt-16">
                     <p className="text-3xl font-medium text-gray-600">Featured <span className="font-medium text-orange-600">Products</span></p>
-                    <div className="w-28 h-0.5 bg-orange-600 mt-2"></div>
+                    <div className="w-28 h-0.5 bg-orange-600  mt-2"></div>
                 </div>
                 <div className="gap-6 mt-6 pb-14 w-full flex justify-center items-center">
-                    {products.slice(0, 5).map((product, index) => <ProductCard key={index} product={product} type={"featured"}/>)}
+                    {products.slice(0, 5).map((product, index) => <ProductCard key={index} product={product} type="featured" role={role}/>)}
                 </div>
                 <button onClick={()=>{navigate(`/products`);}} className="px-7 py-1.5 mb-16 border rounded text-gray-500/70 hover:bg-gray-200 transition">
                     See more

@@ -4,7 +4,7 @@ import productService from "./productService";
 const productsController = {
   handleAllProducts: async (req: Request,res: Response,next: NextFunction) => {
     try {
-      const data = await productService.getAllProducts();
+      const data = await productService.getAllProducts(req.params.email);
       res.status(200).json({ message: "Product retrieved successfully", data: data });
     } catch (error) {
       next(error);

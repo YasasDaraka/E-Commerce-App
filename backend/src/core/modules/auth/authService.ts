@@ -26,7 +26,7 @@ const authService = {
     }
 
     const accessToken = jwtUtils.generateAccessToken({ email: user.email, role: user.role });
-    const refreshToken = jwtUtils.generateRefreshToken({ email: user.email });
+    const refreshToken = jwtUtils.generateRefreshToken({ email: user.email, role: user.role });
 
     logger.info(`Generated tokens for user: ${email}`);
 
@@ -52,7 +52,7 @@ const authService = {
         throw createError(HttpStatus.BAD_REQUEST, "Refresh token not provided");
       }
       const payload = jwtUtils.verifyRefreshToken(token);
-      logger.info(`Access token refreshed for user: ${payload.email}`);
+      logger.info(`Access token refreshed for user: ${payload.email}${payload.role}`);
       return jwtUtils.generateAccessToken({ email: payload.email, role: payload.role });
       
     } catch (error) {

@@ -4,7 +4,7 @@ import productController from "./productController";
 import validate from "../../middlewares/validate";
 import { getProduct,deleteProduct } from "./productSchema";
 
-router.get('/', productController.handleAllProducts);
+router.get('/all/:email', productController.handleAllProducts);
 router.get('/featured/items', productController.handleFeaturedProducts);
 router.get('/:itemName',validate(getProduct), productController.handleGetProductByProductId);
 router.post('/cart/items', productController.handleGetProductsByProductIdList);

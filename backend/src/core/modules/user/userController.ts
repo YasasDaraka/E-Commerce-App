@@ -10,6 +10,14 @@ const userController = {
       next(error);
     }
   },
+  handleAllFilterdUsers: async (req: Request, res: Response, next: NextFunction) => {
+    try {
+      const data = await userService.getAllFilterdUsers();
+      res.status(200).json({ message: "Users retrieved successfully", data: data });
+    } catch (error) {
+      next(error);
+    }
+  },
   handleGetUserByUsername: async (req: Request, res: Response, next: NextFunction) => {
     try {
       const username = req.params.email;

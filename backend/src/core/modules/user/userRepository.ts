@@ -5,9 +5,13 @@ const userRepository = {
     getUserByEmail: async (session: ClientSession, email: string) => {
         return await User.findOne({ email }).session(session);
     },
-
+    
     getAllUsers: async (session: ClientSession) => {
         return await User.find({}, null, { session });
+    },
+
+    getAllFilterdUsers: async (session: ClientSession) => {
+        return await User.find({ role: 'USER' }, null, { session });
     },
 
     createUser: async (session: ClientSession, userData: any) => {

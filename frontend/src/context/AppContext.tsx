@@ -1,13 +1,19 @@
 import { createContext, useContext, useEffect, useState } from "react";
 
-
   const defaultValue = {
     cartItems: {},
-    setCartItems: () => {}, 
-    addToCart: () => {},
-    updateCartQuantity: () => {},
-    getCartCount:() => {},
-    products:[]
+  setCartItems: () => {},
+  addToCart: () => {},
+  updateCartQuantity: () => {},
+  getCartCount: () => 0,
+  getCartAmount: () => 0,
+  getShipCost: () => 0,
+  getTax: () => 0,
+  getUser: () => null,
+  getRole: () => null,
+  getName: () => null,
+  clearCart: () => {},
+  logOut: () => {},
   };
   
 
@@ -21,24 +27,52 @@ export const AppContextProvider = (props:any) => {
 
     const [cartItems, setCartItems] = useState<any>({})
     const [user, setUser] = useState<null | string>(null);
+    const [role, setRole] = useState<null | string>(null);
+    const [name, setName] = useState<null | string>(null);
 
     const getUser = ()=>{
         setUserToContext();
         return user;
     }
 
+    const getRole  = ()=>{
+        setUserToContext();
+        return role;
+    }
+    const getName  = ()=>{
+        setUserToContext();
+        return name;
+    }
     const clearCart = ()=>{
         return setCartItems({});
     }
 
-    const setUserToContext = ()=>{
-        const storedUser = localStorage.getItem('email');
-    
-      if (storedUser) {
-        setUser(storedUser); 
-      }else{
+    const logOut = ()=>{
+        localStorage.removeItem('email');
+        localStorage.removeItem('role');
+        localStorage.removeItem('name');
         setUser(null);
-      }
+        setRole(null);
+        setName(null);
+    }
+
+    useEffect(() => {
+        setUserToContext();
+        // const token = localStorage.getItem("token");
+        // api.defaults.headers.common[
+        //     "Authorization"
+        //   ] = `Bearer ${token}`;   
+    }, []);
+
+      
+    const setUserToContext = ()=>{
+        const storedUser = localStorage.getItem("email");
+        const storedUserRole = localStorage.getItem("role");
+        const storedUserName = localStorage.getItem("name");
+
+        setUser(storedUser || null);
+        setRole(storedUserRole || null);
+        setName(storedUserName || null);
     }
     const addToCart = async (itemId:string) => {
         let cartData = structuredClone(cartItems);
@@ -121,16 +155,10 @@ export const AppContextProvider = (props:any) => {
         return totalAmount;
       }
 
- 
-    useEffect(() => {
-        setUserToContext();
-    }, [])
-
-
     const value = {
-        cartItems, setCartItems, getUser, clearCart,
-        addToCart, updateCartQuantity, getTax,
-        getCartCount, getCartAmount, getShipCost
+        cartItems, setCartItems, getUser, clearCart, logOut,
+        addToCart, updateCartQuantity, getTax, getRole,
+        getCartCount, getCartAmount, getShipCost, getName
     }
 
     return (

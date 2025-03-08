@@ -5,7 +5,7 @@ const Banner = () => {
   const navigate = useNavigate();
   
   return (
-    <div className="flex flex-col md:flex-row items-center justify-between md:pl-20 py-14 md:py-0 bg-[#EEF0F6] my-16 rounded-xl overflow-hidden">
+    <div data-aos="fade-up" className="flex flex-col md:flex-row items-center justify-between md:pl-20 py-14 md:py-0 bg-[#EEF0F6] my-16 rounded-xl overflow-hidden">
       <img
         className="max-w-56"
         src={assets.jbl_soundbox_image}

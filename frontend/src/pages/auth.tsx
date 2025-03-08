@@ -1,9 +1,10 @@
 import React, { useState, useEffect } from 'react';
 import api from '../api/api';
-import FilePicker from '../components/filePicker';
 import showToast from '../alert/alert';
 import { ToastContainer } from 'react-toastify';
 import { useAppContext } from '../context/AppContext';
+import { Visibility, VisibilityOff } from "@mui/icons-material";
+import { assets } from '../assets/assets';
 
 interface FormData {
   email: string;
@@ -26,10 +27,15 @@ interface FormErrors {
 }
 
 const Auth: React.FC = () => {
-  const { getUser} = useAppContext();
+  const {getUser} = useAppContext();
   const [isLogin, setIsLogin] = useState<boolean>(true);
-  const [file,setFile]=useState("")//to  view image
+  const [errors, setErrors] = useState<FormErrors>({});
+  const [files, setFiles] = useState("");
   const [selectedFile, setSelectedFile] = useState<any>(null);
+  const [passwordVisible,setPasswordVisible]=useState({
+    password:false,
+    rePassword:false
+  })
   const [formData, setFormData] = useState<FormData>({
     email: '',
     password: '',
@@ -40,11 +46,7 @@ const Auth: React.FC = () => {
     contact:''
   });
   
-  useEffect(() => {
-    
-  }, [])
 
-  const [errors, setErrors] = useState<FormErrors>({});
 
   const handleChange = (e: any): void => {
     const { name, value } = e.target;
@@ -60,7 +62,7 @@ const Auth: React.FC = () => {
     if (file) {
         const validTypes = ['image/jpeg', 'image/png', 'image/gif'];
         if (validTypes.includes(file.type)) {
-            setFile(URL.createObjectURL(file));
+            setFiles(URL.createObjectURL(file));
 
             const readAsDataURL = (file: any) => {
                 return new Promise((resolve, reject) => {
@@ -80,7 +82,6 @@ const Auth: React.FC = () => {
             }
         } else {
         }
-        console.log(filePath)
     }
 };
 
@@ -128,6 +129,7 @@ const Auth: React.FC = () => {
           contact:''
         });
         setSelectedFile(null);
+        setFiles("");
    }, [isLogin])
 
   const handleSubmit = async (e: any): Promise<void> => {
@@ -147,10 +149,16 @@ const Auth: React.FC = () => {
           });
        
               if (response.status === 201) {
+
                   localStorage.setItem("email", response.data.data.email);
                   localStorage.setItem("name", response.data.data.name);
+                  localStorage.setItem("role", response.data.data.role);
                   localStorage.setItem("token", response.data.data.token);
 
+                  // api.defaults.headers.common[
+                  //   "Authorization"
+                  // ] = `Bearer ${response.data.data.token}`;
+                  
                   setFormData({
                     email: '',
                     password: '',
@@ -161,12 +169,19 @@ const Auth: React.FC = () => {
                     contact:''
                   });
                   setSelectedFile(null);
+                  setFiles("");
                   getUser();
-                  showToast('User Create Successed',"success");
+                  showToast('User Created Successfully',"success");
               }
 
         } catch (error: any) {
-          showToast('Error Creating User', "error");
+          if (error.response && error.response.status === 400) {
+            showToast('Invalid credentials. Please check your email and password', 'error');
+          } else if(error.response && error.response.status === 409){
+            showToast('User email already exist', "error");
+          }else{
+            showToast('Error Creating User', "error");
+          }
         }
       }else{
         try {
@@ -178,9 +193,15 @@ const Auth: React.FC = () => {
           });
        
               if (response.status === 200) {
+       
                   localStorage.setItem("email", response.data.data.email);
                   localStorage.setItem("name", response.data.data.name);
+                  localStorage.setItem("role", response.data.data.role);
                   localStorage.setItem("token", response.data.data.token);
+
+                  // api.defaults.headers.common[
+                  //   "Authorization"
+                  // ] = `Bearer ${response.data.data.token}`;
 
                   setFormData({
                     email: '',
@@ -192,6 +213,7 @@ const Auth: React.FC = () => {
                     contact:''
                   });
                   setSelectedFile(null);
+                  setFiles("");
                   getUser();
                   showToast('User Sign In Successed',"success");
               }
@@ -219,13 +241,13 @@ const Auth: React.FC = () => {
   return (
     <div className="min-h-screen flex flex-col justify-center pb-12 sm:px-6 lg:px-8">
       <div className="sm:mx-auto sm:w-full sm:max-w-md">
-        <h2 className="mt-6 text-center text-3xl font-extrabold text-gray-700">
+        <h2 className="mt-6 text-center text-3xl font-extrabold text-gray-600">
           {isLogin ? 'Sign in to your account' : 'Create a new account'}
         </h2>
         <p className="mt-2 text-center text-sm text-gray-600">
-          {isLogin ? "Don't have an account? " : "Already have an account? "}
+          {isLogin ? "Don't have an account ? " : "Already have an account ? "}
           <button
-            className="font-medium text-orange-600 hover:text-orange-500 focus:outline-none"
+            className="font-semibold text-orange-500/90  hover:text-orange-500/60 focus:outline-none ml-1"
             onClick={toggleForm}
           >
             {isLogin ? 'Sign up' : 'Sign in'}
@@ -234,10 +256,32 @@ const Auth: React.FC = () => {
       </div>
 
       <div className="mt-8 mb-12 sm:mx-auto sm:w-full sm:max-w-md">
-        <div className="bg-[#EEF0F6]/60 py-8 px-4 shadow sm:rounded-lg sm:px-10">
+        <div className="bg-[#EEF0F6]/60 py-8 px-4 shadow sm:rounded-lg sm:px-10 border border-gray-100">
           <form className="space-y-6" onSubmit={handleSubmit}>
-
+              
             {!isLogin && (
+              <div className='flex flex-col'>
+                <div className="flex justify-center flex-wrap items-center relative bottom-2">
+                  <label>
+                    <input
+                      onChange={(e: any) => {
+                        const updatedFiles = e.target.files[0]
+                          ? e.target.files[0]
+                          : "";
+                          handleFileSelect(updatedFiles);
+                      }}
+                      type="file"
+                      hidden
+                    />
+                    <img
+                      className="max-w-24 cursor-pointer"
+                      src={files ? files : assets.upload_area}
+                      alt=""
+                      width={100}
+                      height={100}
+                    />
+                  </label>
+                </div>
               <div className="grid grid-cols-1 gap-6 sm:grid-cols-2">
                 <div>
                   <label htmlFor="firstName" className="block text-sm font-medium text-gray-700">
@@ -278,6 +322,7 @@ const Auth: React.FC = () => {
                   </div>
                 </div>
               </div>
+              </div>
             )}
 
             <div>
@@ -306,11 +351,11 @@ const Auth: React.FC = () => {
               <label htmlFor="password" className="block text-sm font-medium text-gray-700">
                 Password
               </label>
-              <div className="mt-1">
+              <div className="mt-1 relative">
                 <input
                   id="password"
                   name="password"
-                  type="password"
+                  type={passwordVisible.password ? "text" : "password"}
                   autoComplete={isLogin ? "current-password" : "new-password"}
                   value={formData.password}
                   onChange={handleChange}
@@ -318,6 +363,19 @@ const Auth: React.FC = () => {
                     errors.password ? 'border-red-300' : 'border-gray-300'
                   } rounded-md shadow-sm placeholder-gray-400 border border-gray-300 focus:outline-none focus:ring-2 focus:ring-orange-500/40 focus:border-transparent sm:text-sm`}
                 />
+                  <button
+                    type="button"
+                    onClick={() =>
+                      setPasswordVisible((prevData: any) => ({
+                        ...prevData,
+                        password: !prevData.password, 
+                      }))
+                    }
+                    className="absolute inset-y-0 right-3 flex items-center text-gray-500"
+                  >
+                    {passwordVisible.password ? <VisibilityOff /> : <Visibility />}
+                  </button>
+
                 {errors.password && (
                   <p className="mt-2 text-sm text-red-600">{errors.password}</p>
                 )}
@@ -329,17 +387,30 @@ const Auth: React.FC = () => {
                 <label htmlFor="confirmPassword" className="block text-sm font-medium text-gray-700">
                   Confirm password
                 </label>
-                <div className="mt-1">
+                <div className="mt-1 relative">
                   <input
                     id="confirmPassword"
                     name="confirmPassword"
-                    type="password"
+                    type={passwordVisible.rePassword ? "text" : "password"}
                     value={formData.confirmPassword}
                     onChange={handleChange}
                     className={`appearance-none block w-full px-3 py-2 border ${
                       errors.confirmPassword ? 'border-red-300' : 'border-gray-300'
                     } rounded-md shadow-sm placeholder-gray-400 border border-gray-300 focus:outline-none focus:ring-2 focus:ring-orange-500/40 focus:border-transparent sm:text-sm`}
                   />
+                  <button
+                    type="button"
+                    onClick={() =>
+                      setPasswordVisible((prevData: any) => ({
+                        ...prevData,
+                        rePassword: !prevData.rePassword, 
+                      }))
+                    }
+                    className="absolute inset-y-0 right-3 flex items-center text-gray-500"
+                  >
+                    {passwordVisible.rePassword ? <VisibilityOff /> : <Visibility />}
+                  </button>
+                  
                   {errors.confirmPassword && (
                     <p className="mt-2 text-sm text-red-600">{errors.confirmPassword}</p>
                   )}
@@ -368,20 +439,7 @@ const Auth: React.FC = () => {
                 </div>
               </div>
             )}
-            {!isLogin && (
-              <div className='flex flex-row justify-center items-center gap-8 mb-10 relative'>
-                <label htmlFor="" className="block text-sm font-medium text-gray-700">
-                  Prifile picture
-                </label>
-                <div className="mt-1 ">
-                  <FilePicker onFileSelect={handleFileSelect}/>
-                </div>
-                {selectedFile && (
-                    <p className="mt-2 text-md font-medium text-green-600 absolute top-10">Image Selected</p>
-                  )}
-              </div>
-            )}
-
+            
             {isLogin && (
               <div className="flex items-center justify-between">
                 <div className="flex items-center">
@@ -407,8 +465,7 @@ const Auth: React.FC = () => {
             <div>
               <button
                 type="submit"
-                className="w-full flex justify-center py-2 px-4 border border-transparent rounded-md shadow-sm text-sm font-medium text-white bg-orange-600/80 hover:bg-orange-600 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-orange-500"
-              >
+                className="w-full flex justify-center py-2 px-4 border border-transparent rounded-md shadow-sm text-sm font-medium text-white bg-orange-600/80 hover:bg-orange-600 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-orange-500"              >
                 {isLogin ? 'Sign in' : 'Sign up'}
               </button>
             </div>
@@ -419,7 +476,7 @@ const Auth: React.FC = () => {
                   <div className="w-full border-t border-gray-300" />
                 </div>
                 <div className="relative flex justify-center text-sm">
-                  <span className="px-2 bg-white text-gray-500">Or continue with</span>
+                  <span className="px-2 bg-[#EEF0F6]/60 text-gray-500">Or continue with</span>
                 </div>
               </div>
 

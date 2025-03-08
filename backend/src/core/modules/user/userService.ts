@@ -29,6 +29,28 @@ const userService = {
       session.endSession();
     }
   },
+  getAllFilterdUsers: async () => {
+    logger.info("Fetching all Filterd users");
+    const session = await mongoose.startSession();
+   try{
+        session.startTransaction();
+        const users = await userRepository.getAllFilterdUsers(session);
+        if (!users || users.length === 0) {
+          logger.warn("No users found");
+          return [];
+        }
+        await session.commitTransaction();
+        logger.info(`Fetched ${users.length} users`);
+        return users;
+    }catch(error){
+        logger.error("Error fetching all Filterd users", { error });
+        await session.abortTransaction();
+        throw error;
+    }
+    finally {
+      session.endSession();
+    }
+  },
 
   getUserByUsername: async (email: string) => {
     const session = await mongoose.startSession();
@@ -68,6 +90,7 @@ const userService = {
           const bcryptedPassword = await bcrypt.hash(userData.password, 10);
 
           userData.password = bcryptedPassword
+          userData.role = "USER"
 
           const createUser = await userRepository.createUser(session, userData);
 

@@ -45,7 +45,7 @@ const Contact = () => {
   return (
     <div className="px-6 md:px-16 lg:px-32 pt-14 space-y-10">
   
-      <div className="flex flex-col items-center mb-8">
+      <div data-aos="zoom-in" className="flex flex-col items-center mb-8">
         <h2 className="text-3xl font-medium text-gray-600">Contact <span className="font-medium text-orange-600">Us</span></h2>
         <div className="w-24 h-0.5 bg-orange-600 mt-2"></div>
         <p className="text-gray-600 mt-4 text-center max-w-2xl">
@@ -56,7 +56,7 @@ const Contact = () => {
  
       <div className="grid grid-cols-1 md:grid-cols-2 gap-12">
 
-        <div className="bg-[#EEF0F6]/90 p-8 rounded-xl border-[#F8F2EE]/50">
+        <div data-aos="zoom-in-right" className="bg-[#EEF0F6]/90 p-8 rounded-xl border-[#F8F2EE]/50">
           <h2 className="text-xl font-medium text-gray-600 mb-6">Get in Touch</h2>
           
           <div className="space-y-6">
@@ -111,7 +111,7 @@ const Contact = () => {
         </div>
         
 
-        <div className="bg-[#EEF0F6]/80 p-8 rounded-xl shadow-sm border border-[#F8F2EE]/50">
+        <div data-aos="zoom-in-left" className="bg-[#EEF0F6]/80 p-8 rounded-xl shadow-sm border border-[#F8F2EE]/50">
           <h2 className="text-xl font-medium text-gray-600 mb-6">Send Us a Message</h2>
           
           {submitted && (
@@ -184,7 +184,7 @@ const Contact = () => {
       </div>
       
 
-      <div className="my-16">
+      <div data-aos="zoom-in" className="my-16">
         <div className="bg-[#EEF0F6]/90 rounded-xl overflow-hidden h-96 flex items-center justify-center relative">
           <div className="text-center">
             <img 
@@ -199,12 +199,12 @@ const Contact = () => {
       
 
       <div className="py-10 mb-16">
-        <div className="flex flex-col items-center mb-10">
+        <div data-aos="fade-down" className="flex flex-col items-center mb-10">
           <h2 className="text-2xl font-medium text-gray-600">Frequently Asked <span className="font-medium text-orange-600">Questions</span></h2>
           <div className="w-32 h-0.5 bg-orange-600 mt-2"></div>
         </div>
         
-        <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
+        <div data-aos="zoom-in" className="grid grid-cols-1 md:grid-cols-2 gap-6">
           {[
             {
               question: "Are your products brand new or refurbished?",
@@ -230,7 +230,7 @@ const Contact = () => {
           ))}
         </div>
         
-        <div className="text-center mt-8">
+        <div data-aos="fade-up" className="text-center mt-8">
           <p className="text-gray-600">
             Have more questions? <a href="#" className="text-orange-600 hover:underline">Check our FAQ page</a> or contact us directly.
           </p>

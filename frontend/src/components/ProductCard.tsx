@@ -4,10 +4,14 @@ import { assets } from '../assets/assets'
 interface ProductCardProps {
     product: any;
     type?: "featured"; 
-  }
-const ProductCard = ( {product, type}:ProductCardProps) => {
-
+    wishlistClick?: (itemName: string, isInWishlist: boolean) => void;
+    user?:string;
+    role:string;
+    screen?:"products";
+}
+const ProductCard = ( {product, type, wishlistClick, user, role, screen}:ProductCardProps) => {
     const navigate = useNavigate();
+
     return (
         <div
             onClick={() => { }}
@@ -19,13 +23,13 @@ const ProductCard = ( {product, type}:ProductCardProps) => {
                     alt={product.itemName}
                     className="group-hover:scale-105 transition object-cover w-full mix-blend-multiply"
                 />
-                <button className="absolute top-2 right-2 bg-white p-2 rounded-full shadow-md">
-                    <img
+                {screen == "products" && role == "USER" && <button className={`${product?.isInWishlist ? "bg-orange-400/30":"bg-white"} absolute top-2 right-2 p-2 rounded-full shadow-md`}>
+                    <img  onClick={() => { wishlistClick && user ? wishlistClick(product.itemName,product.isInWishlist): null}}
                         className="h-3 w-3"
                         src={assets.heart_icon}
                         alt="heart_icon"
                     />
-                </button>
+                </button>}
             </div>
 
             <p className="md:text-base font-medium pt-2 w-full truncate text-gray-600">{product.itemName}</p>

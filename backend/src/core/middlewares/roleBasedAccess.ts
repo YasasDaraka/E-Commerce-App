@@ -16,9 +16,13 @@ const matchRoute = (routePath: string, requestPath: string): boolean => {
   return routeParts.every((part, index) => part.startsWith(":") || part === requestParts[index]);
 };
 
+const isDirectAccessPath = (requestPath: string, directAccessRoutes: string[]): boolean => {
+  return directAccessRoutes.some(route => matchRoute(route, requestPath));
+};
+
 const roleBasedAccess = (req: Request, res: Response, next: NextFunction): void => {
 
-  if (dirrectAccessRoutes.includes(req.path)) {
+  if (isDirectAccessPath(req.path, dirrectAccessRoutes)) {
     return next();
   }
 

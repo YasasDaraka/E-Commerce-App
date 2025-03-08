@@ -1,7 +1,7 @@
 
 const NewsLetter = () => {
   return (
-    <div className="flex flex-col items-center justify-center text-center space-y-2 pt-8 pb-14">
+    <div data-aos="fade-up" className="flex flex-col items-center justify-center text-center space-y-2 pt-8 pb-14">
       <h1 className="md:text-4xl text-2xl font-medium text-gray-500">
         Subscribe now & get 20% off
       </h1>

@@ -1,22 +1,45 @@
 import productRepository from "./productRepository";
+import wishlistRepository from "../wishlist/wishlistRepository";
+import userRepository from "../user/userRepository";
 import mongoose from "mongoose";
 import { createError, HttpStatus } from "../../middlewares/customErrorHandler";
 import logger from "../../utils/logger";
 
 const productService = {
-  getAllProducts: async () => {
+  getAllProducts: async (email:string) => {
     logger.info("Fetching all Products");
     const session = await mongoose.startSession();
     try {
       session.startTransaction();
-      const product = await productRepository.getAllProducts(session);
-      if (!product || product.length === 0) {
+      const products = await productRepository.getAllProducts(session);
+      if (!products || products.length === 0) {
         logger.warn("No Products found");
         return [];
       }
+
+      const user = await userRepository.getUserByEmail(session, email);
+
+      if (user) {
+      
+        const wishlist = await wishlistRepository.getWishlistByUserId(
+          session,
+          user._id
+        );
+
+        const wishlistSet = new Set(wishlist.map(w => w.item.toString()));
+
+        const updatedProducts = products.map((product:any) => ({
+            ...product.toObject(),
+            isInWishlist: wishlistSet.has(product._id.toString()),
+        }));
+
+        await session.commitTransaction();
+        logger.info(`Filterd with wishlist Products Fetched ${products.length} Product`);
+        return updatedProducts
+      } 
       await session.commitTransaction();
-      logger.info(`Fetched ${product.length} Product`);
-      return product;
+      logger.info(`Fetched ${products.length} Product`);
+      return products;
     } catch (error) {
       logger.error("Error fetching all Product", { error });
       await session.abortTransaction();
@@ -95,6 +118,7 @@ const productService = {
 
   createProduct: async (productData: any) => {
     const session = await mongoose.startSession();
+    let isTransactionCommitted = false;
     try {
       logger.info(`Creating Product: ${productData.itemName}`);
       session.startTransaction();
@@ -118,7 +142,9 @@ const productService = {
       logger.info(`Product created successfully: ${productData.itemName}`);
     } catch (error) {
       logger.error(`Error creating Product: ${productData.itemName}`, { error });
-      await session.abortTransaction();
+      if (!isTransactionCommitted) {
+        await session.abortTransaction();
+      }
       throw error;
     }finally {
       session.endSession();
@@ -167,7 +193,7 @@ const productService = {
       const deletedProduct = await productRepository.deleteProduct(session, itemName);
 
       if (!deletedProduct) {
-        logger.error(`Failed to Product user: ${itemName}`);
+        logger.error(`Failed to delete Product: ${itemName}`);
         throw createError(HttpStatus.BAD_REQUEST, "Invalid request data");
       }
       await session.commitTransaction();

@@ -34,6 +34,10 @@ import email from "./email.png";
 import call from "./call.png";
 import map_view from "./map_view.png";
 import image_error from "./image_error.png";
+import upload_area from "./upload_area.png";
+import order_icon from "./order_icon.svg";
+import product_list_icon from "./product_list_icon.svg";
+import profile from "./profile.png";
 
 
 import apple_earphone_image from "./apple_earphone_image.png";
@@ -74,6 +78,10 @@ export const assets = {
   call,
   email,
   map_view,
-  image_error
+  image_error,
+  upload_area,
+  order_icon,
+  product_list_icon,
+  profile
 
 };

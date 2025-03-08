@@ -3,8 +3,6 @@ import { useAppContext } from "../context/AppContext";
 import { useEffect, useState } from "react";
 import AddCard from './AddCard';
 import { assets } from '../assets/assets';
-import { useNavigate } from 'react-router-dom';
-
 interface OrderProps{
   cart:any
   setPaymentForm: any
@@ -17,17 +15,6 @@ const OrderSummary = ({cart,paymentForm,selectedAddress,setPaymentForm,setSelect
   const { getCartCount, getCartAmount, getShipCost, getTax } = useAppContext()
   const [isCardOpen, setIsCardOpen] = useState(false); 
   const [confirm, setConfirem] = useState(false);
-
-  // const navigate = useNavigate();
-// const [isDropdownOpen, setIsDropdownOpen] = useState(false);
-//   const fetchUserAddresses = async () => {
-//     setUserAddresses(addressDummyData);
-//   }
-
-  // const handleAddressSelect = (address:any) => {
-  //   setSelectedAddress(address);
-  //   setIsDropdownOpen(false);
-  // };
 
   const handleChange = (e:any) => {
     const { value } = e.target;
@@ -61,41 +48,6 @@ const OrderSummary = ({cart,paymentForm,selectedAddress,setPaymentForm,setSelect
                 required
                 className="w-full px-4 py-2 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-orange-500/40 focus:border-transparent"
               />
-            {/* <button
-              className="peer w-full text-left px-4 pr-2 py-2 bg-gray-300/5 text-gray-700 focus:outline-none"
-              onClick={() => setIsDropdownOpen(!isDropdownOpen)}
-            >
-              <span className='text-gray-600'>
-                {selectedAddress
-                  ? `${selectedAddress.fullName}, ${selectedAddress.area}, ${selectedAddress.city}, ${selectedAddress.state}`
-                  : "Select Address"}
-              </span>
-              <svg className={`w-5 h-5 inline float-right transition-transform duration-200 ${isDropdownOpen ? "rotate-0" : "-rotate-90"}`}
-                xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke="#6B7280"
-              >
-                <path strokeLinecap="round" strokeLinejoin="round" strokeWidth="2" d="M19 9l-7 7-7-7" />
-              </svg>
-            </button>
-
-            {isDropdownOpen && (
-              <ul className="absolute w-full bg-white border border-gray-300 shadow-md mt-1 z-10 rounded-b-md">
-                {userAddresses.map((address:any, index:any) => (
-                  <li
-                    key={index}
-                    className="px-4 py-2 hover:bg-gray-500/10 cursor-pointer text-gray-500"
-                    onClick={() => handleAddressSelect(address)}
-                  >
-                    {address.fullName}, {address.area}, {address.city}, {address.state}
-                  </li>
-                ))}
-                <li
-                  onClick={() => navigate("/add-address")}
-                  className="px-4 py-1.5 hover:bg-orange-600 cursor-pointer  text-white text-center bg-[#F88655] rounded-md"
-                >
-                  + Add New Address
-                </li>
-              </ul>
-            )} */}
           </div>
         </div>
 
@@ -138,7 +90,7 @@ const OrderSummary = ({cart,paymentForm,selectedAddress,setPaymentForm,setSelect
           </div>
           <div className="flex justify-between">
             <p className=" text-gray-500">Shipping Fee</p>
-            <p className=" text-gray-500">$ {getShipCost(cart)}</p>
+            <p className=" text-gray-500"> {getShipCost(cart) == 0 ? "Free": `$ ${getShipCost(cart)}`}</p>
           </div>
           <div className="flex justify-between">
             <p className=" text-gray-500">Tax</p>

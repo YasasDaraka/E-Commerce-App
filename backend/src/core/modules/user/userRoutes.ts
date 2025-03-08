@@ -5,6 +5,7 @@ import validate from "../../middlewares/validate";
 import { getUser,deleteUser } from "./userSchema";
 
 router.get('/', userController.handleAllUsers);
+router.get('/filterd/all', userController.handleAllFilterdUsers);
 router.get('/:email',validate(getUser), userController.handleGetUserByUsername);
 router.post('/', userController.handleCreateUser);
 router.put('/:email', userController.handleUpdateUser);

@@ -1,29 +1,41 @@
 import { ClientSession } from "mongoose";
-import { Item, Order, OrderDetail } from "../../database/schemas/mongodbSchemas";
+import { Order, OrderDetail } from "../../database/schemas/mongodbSchemas";
 
 const orderRepository = {
-
-   createOrder : async (session: ClientSession, customer:any, data:any) => { 
-    const order = new Order({
-      userId: customer._id,
-      amount: data.amount,
-      addresses: data.addresses,
-      status: data.status,
-      cardNum: data.cardNum,
-      
-    });
-    return await order.save({ session });
+  getAllOrders: async (session: ClientSession) => {
+    return await Order.find({}, null, { session }).populate("orderDetails");
   },
-  createOrderDetails : async (session: ClientSession, orderId:any, data:any ) => { 
-      const orderDetail = new OrderDetail({
-        orderId: orderId,
-        itemId: data.itemId,
-        quantity: data.quantity,
-        unitPrice: data.unitPrice,
-        total: data.total,
-      });
-      return await orderDetail.save({ session });
-  }
+  getOrderstByEmail: async (session: ClientSession, userId: any) => {
+    return await Order.find({ userId }).session(session).populate({
+      path: "orderDetails",
+      populate: {
+        path: "itemId",
+        model: "Item",
+        select: "itemName price image",
+      },
+    });
+  },
+  createOrder: async (user: any, orderData: any) => {
+    return new Order({
+      userId: user._id,
+      email: user.email,
+      status: orderData.status,
+      amount: orderData.amount,
+      cardNum: orderData.cardNum,
+      addresses: orderData.addresses,
+      date: new Date(),
+    });
+  },
+  createOrderDetails: async (savedOrder: any, item: any) => {
+    return new OrderDetail({
+      orderId: savedOrder._id,
+      itemId: item.itemId,
+      itemName: item.itemName,
+      quantity: item.quantity,
+      unitPrice: item.unitPrice,
+      total: item.total,
+    });
+  },
 };
 
 export default orderRepository;

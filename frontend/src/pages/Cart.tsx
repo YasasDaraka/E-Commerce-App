@@ -14,8 +14,8 @@ import {
   DialogContentText,
   DialogTitle,
 } from "@mui/material";
-const Cart = () => {
 
+const Cart = () => {
   const { cartItems, addToCart, getCartCount, updateCartQuantity, getShipCost, getCartAmount, getTax, getUser, clearCart} = useAppContext();
   const [cart, setCart] = useState<any[]>([]);
   const [signIn, setSignIn] = useState<boolean>(false);
@@ -38,6 +38,10 @@ const Cart = () => {
   const getProductItems = async ()=> {
 
     const itemNames =   Object.keys(cartItems);
+    if (itemNames.length === 0) {
+      showToast("Cart is empty", "error");
+      return;
+    }
     try {
       const response = await api.post('/product/cart/items', {
         itemNames: itemNames   
@@ -50,7 +54,7 @@ const Cart = () => {
     } catch (err) {
         showToast('Error getting Product', "error");
     }
-    }
+  }
 
     const checkCartQty = async (id:any)=> {
 
@@ -73,6 +77,7 @@ const Cart = () => {
           orderDetails: cart.map((item)=>(
               {
                 itemId: item._id, 
+                itemName:item.itemName,
                 quantity: cartItems[item.itemName],
                 unitPrice: item.offerPrice,
                 total: item.offerPrice * cartItems[item.itemName]
@@ -87,7 +92,7 @@ const Cart = () => {
           } 
 
         } catch (err) {
-          showToast('Error Placing Product', "error");
+          showToast('Error Placing Order', "error");
         }
         
     }
@@ -153,8 +158,7 @@ const Cart = () => {
                 </tr>
               </thead>
               <tbody>
-                {cart.map((item:any) => {
-                  // const product = products.find((product:any) => product._id === itemId);
+              {cart.map((item:any) => {
 
                   if (!item || cartItems[item.itemName] <= 0 || cartItems[item.itemName] == null) return null;
 
@@ -171,7 +175,7 @@ const Cart = () => {
                           </div>
                           <button
                             className="md:hidden text-xs text-orange-600 mt-1"
-                             onClick={() => updateCartQuantity(item.itemName, 0)}
+                            onClick={() => updateCartQuantity(item.itemName, 0)}
                           >
                             Remove
                           </button>
@@ -180,7 +184,7 @@ const Cart = () => {
                           <p className="text-gray-800">{item.name}</p>
                           <button
                             className="text-xs text-orange-600 mt-1"
-                             onClick={() => updateCartQuantity(item.itemName, 0)}
+                            onClick={() => updateCartQuantity(item.itemName, 0)}
                           >
                             Remove
                           </button>
@@ -189,7 +193,7 @@ const Cart = () => {
                       <td className="py-4 md:px-4 px-1 text-gray-600">${item.offerPrice}</td>
                       <td className="py-4 md:px-4 px-1">
                         <div className="flex items-center md:gap-2 gap-1">
-                          <button onClick={() => { cartItems[item.itemName] > 1 && updateCartQuantity(item.itemName, cartItems[item.itemName] - 1)}}>
+                        <button onClick={() => { cartItems[item.itemName] > 1 && updateCartQuantity(item.itemName, cartItems[item.itemName] - 1)}}>
                             <img
                               src={assets.decrease_arrow}
                               alt="decrease_arrow"
@@ -213,7 +217,7 @@ const Cart = () => {
               </tbody>
             </table>
           </div>
-          <button onClick={()=> {navigate('/products')}} className="group flex items-center mt-6 gap-2 text-orange-600">
+          <button onClick={()=> {navigate('/shop')}} className="group flex items-center mt-6 gap-2 text-[#895025]/70">
             <img
               className="group-hover:-translate-x-1 transition"
               src={assets.arrow_right_icon_colored}

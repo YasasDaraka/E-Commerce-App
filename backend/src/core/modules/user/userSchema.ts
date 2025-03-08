@@ -1,7 +1,7 @@
 import { z } from "zod";
   const getUser = z.object({
     params: z.object({
-        email: z.string().min(8, "Username is required")
+        email: z.string().min(5, "Username is required")
     })
   });
 

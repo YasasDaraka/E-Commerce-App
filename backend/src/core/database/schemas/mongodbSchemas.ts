@@ -1,16 +1,16 @@
 import mongoose, { Schema, Document, Types } from 'mongoose';
 
 
-interface IAddress extends Document {
-  email: Types.ObjectId; 
-  street: string;
-  city: string;
-  state: string;
-  zipCode: string;
-  country: string;
-  isDefault: boolean;
+// interface IAddress extends Document {
+//   email: Types.ObjectId; 
+//   street: string;
+//   city: string;
+//   state: string;
+//   zipCode: string;
+//   country: string;
+//   isDefault: boolean;
 
-}
+// }
 
 interface IUser extends Document {
   name: string;
@@ -40,8 +40,10 @@ interface IItem extends Document {
 }
 
 interface IOrderDetail extends Document {
-  orderId: Types.ObjectId;
-  itemName: Types.ObjectId;
+  _id: Types.ObjectId;
+  itemId: Types.ObjectId;
+  itemName: string;
+  item: string;
   quantity: number;
   unitPrice: number;
   total: number;
@@ -50,18 +52,18 @@ interface IOrderDetail extends Document {
 
 interface IOrder extends Document {
   userId: Types.ObjectId; 
+  email: string;
   status: string;
   amount: number;
   cardNum: string; 
   orderDetails: Types.ObjectId[];
-  addresses: Types.ObjectId;
+  addresses: string;
   date: Date; 
 }
 
 interface IWishlist extends Document {
   email: Types.ObjectId; 
-  items: Types.ObjectId[];
-
+  item: Types.ObjectId;
 }
 
 // const AddressSchema: Schema = new Schema({
@@ -102,6 +104,7 @@ const ItemSchema: Schema = new Schema({
 const OrderDetailSchema: Schema = new Schema({
   orderId: { type: Schema.Types.ObjectId, ref: 'Order', required: true},
   itemId: { type: Schema.Types.ObjectId, ref: 'Item', required: true},
+  itemName: { type: String, required: true },
   quantity: { type: Number, required: true },
   unitPrice: { type: Number, required: true },
   total: { type: Number, required: true }
@@ -109,6 +112,7 @@ const OrderDetailSchema: Schema = new Schema({
 
 const OrderSchema: Schema = new Schema({
   userId: { type: Schema.Types.ObjectId, ref: 'User', required: true },
+  email: { type: String, required: true},
   status: {
     type: String,
     enum: ['pending', 'processing', 'shipped', 'delivered', 'cancelled'],
@@ -124,9 +128,8 @@ const OrderSchema: Schema = new Schema({
 
 const WishlistSchema: Schema = new Schema({
   email: { type: Schema.Types.ObjectId, ref: 'User', required: true},
-  items: [{ type: Schema.Types.ObjectId, ref: 'Item' }]
+  item: { type: Schema.Types.ObjectId, ref: 'Item', required: true}
 });
-
 
 // export const Address = mongoose.model<IAddress>('Address', AddressSchema);
 export const User = mongoose.model<IUser>('User', UserSchema);
