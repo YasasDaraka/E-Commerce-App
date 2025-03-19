@@ -217,7 +217,7 @@ const Cart = () => {
               </tbody>
             </table>
           </div>
-          <button onClick={()=> {navigate('/shop')}} className="group flex items-center mt-6 gap-2 text-[#895025]/70">
+          <button onClick={()=> {navigate('/products')}} className="group flex items-center mt-6 gap-2 text-[#895025]/70">
             <img
               className="group-hover:-translate-x-1 transition"
               src={assets.arrow_right_icon_colored}

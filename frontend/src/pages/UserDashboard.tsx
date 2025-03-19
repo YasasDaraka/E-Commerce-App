@@ -201,7 +201,7 @@ export default function UserDashboard() {
                 (item.item != null ? 
                   <div key={item.item.itemName } className="bg-[#EEF0F6]/90 border border-gray-200 rounded-lg p-4 shadow-sm">
                   <div className='flex justify-center'>
-                  <img src={item.image} alt={item.item.itemName} className="w-4/5 object-cover rounded-md mb-4 ab mix-blend-multiply" />
+                  <img src={item.item.image} alt={item.item.itemName} className="w-3/5 object-cover rounded-md mb-4 ab mix-blend-multiply" />
                   </div>
                  
                   <div>
